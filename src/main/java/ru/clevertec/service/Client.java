@@ -1,37 +1,28 @@
 package ru.clevertec.service;
 
-import lombok.Data;
-import lombok.Getter;
 import ru.clevertec.model.Binder;
 
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.*;
 import java.util.concurrent.locks.Lock;
 import java.util.concurrent.locks.ReentrantLock;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 /**
- Client - has a list of data in the form of a List<Integer> from 1 to n. Separate threads select a value from the list
- by a random index (remove() method) and send it to the server in the form of a request (a class with an int -field)
- containing this value in asynchronous mode. The number of requests is equal to the size of the original list.
- Control: after sending all requests, the size of the data list = 0.
+ Client - has a list of data in the form of a List<Integer> from 1 to n. Separate threads select a value from the list by
+ a random index (remove() method) and send it to the server in the form of a request (a class with an int -field)
+ containing this value in asynchronous mode. The number of requests is equal to the size of the original list. Control:
+ after sending all requests, the size of the data list = 0.
 
- @see Server
- */
+ @see Server */
 
 public class Client {
 
-    @Getter
-    private volatile int accumulator;
     private final List<Integer> list;
     private final int sizeList;
 
     public Client(int sizeList) {
-
         this.sizeList = sizeList;
         //Filling in the data list
         this.list =
@@ -45,9 +36,10 @@ public class Client {
      accumulator resource common to all threads. Final control: accumulator = (1+n) * (n/2). Those. for a range of 1-100,
      the answer should be 5050.
      @param server
+     @return returns the sum of responses from the server (accumulator)
      @see Server
      */
-    public void requestToServer(Server server) {
+    public Integer requestToServer(Server server) {
         Lock lock = new ReentrantLock();
         ExecutorService executor = Executors.newFixedThreadPool(sizeList);
 
@@ -73,7 +65,7 @@ public class Client {
                         .mapToObj(this::computing)
                         .toList();
         executor.shutdown();
-        accumulator = sumAccumulator(listAccumulator);
+       return sumAccumulator(listAccumulator);
     }
 
     /**

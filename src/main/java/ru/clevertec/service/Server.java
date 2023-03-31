@@ -22,7 +22,7 @@ import java.util.concurrent.locks.ReentrantLock;
 public class Server {
 
     @Getter
-    private List<Integer> list = new CopyOnWriteArrayList<>();
+    private final List<Integer> list = new CopyOnWriteArrayList<>();
 
     /**
      Request handling method
