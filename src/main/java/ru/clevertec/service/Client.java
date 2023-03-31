@@ -1,6 +1,7 @@
 package ru.clevertec.service;
 
 import lombok.Data;
+import lombok.Getter;
 import ru.clevertec.model.Binder;
 
 import java.util.List;
@@ -21,13 +22,13 @@ import java.util.stream.IntStream;
 
  @see Server
  */
-@Data
+
 public class Client {
 
-    private final List<Integer> list;
+    @Getter
     private volatile int accumulator;
+    private final List<Integer> list;
     private final int sizeList;
-
 
     public Client(int sizeList) {
 
@@ -84,6 +85,11 @@ public class Client {
         return ((n + 1) * (n / 2));
     }
 
+    /**
+     Method for calculating the sum of received responses from the Server
+     * @param listAccumulator
+     * @return the sum of all elements of the list
+     */
     private int sumAccumulator(List<Integer> listAccumulator) {
         return listAccumulator.stream()
                 .mapToInt(Integer::intValue)
