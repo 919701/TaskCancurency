@@ -1,21 +1,17 @@
 package ru.clevertec.service;
 
 import org.junit.jupiter.api.Test;
-import ru.clevertec.model.Binder;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.mockito.Mockito.*;
 
-class ClientTest {
+public class ClientServerTest {
 
     @Test
-    void checkRequestToServerShouldRealValue() {
+    void checkClientServerTestShouldRealityValue() {
         Client client = new Client(10);
-        Server server = spy(Server.getInstance());
+        Server server = Server.getInstance();
 
         var accumulator = client.requestToServer(server);
-        doReturn(new Binder(1)).when(server).response(new Binder(anyInt()));
-
         assertEquals(205, accumulator);
     }
 }
