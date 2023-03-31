@@ -1,30 +1,31 @@
 package ru.clevertec.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ru.clevertec.model.Binder;
+
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.*;
 
 class ClientTest {
 
-    Client client;
-    Server server;
+    @Test
+    void checkRequestToServerShouldResultIsBeActual() {
+        Client client = new Client(10);
+        Server server = Server.getInstance();
 
-    @BeforeEach
-    void setUp() {
-        client = new Client(10);
-        server = Server.getInstance();
-
+        assertEquals(205, client.requestToServer(server));
     }
 
     @Test
-    void requestToServer() {
+    void mockito() {
+        Client client = new Client(10);
+        Server server = mock(Server.class);
 
-    }
 
-    @Test
-    void checkSumAccumulatorShouldCountCorrectly() {
-        client.requestToServer(server);
-        var accumulator = client.getAccumulator();
-        Assertions.assertEquals(205, accumulator);
+        doReturn(new Binder(0)).when(server).response(any());
+        assertEquals(0,client.requestToServer(server));
+        verify(server).response(any());
     }
 }
